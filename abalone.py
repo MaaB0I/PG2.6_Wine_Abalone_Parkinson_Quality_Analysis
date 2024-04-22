@@ -1,8 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Datensatz laden
-data = pd.read_csv('CSV/winequality-red.csv', delimiter=';')
+# Laden der Daten
+column_names = ['Sex', 'Length', 'Diameter', 'Height', 'Whole weight', 'Shucked weight', 'Viscera weight', 'Shell weight', 'Rings']
+data = pd.read_csv('CSV/abalone/abalone.data', header=None, names=column_names)
 
 # Erkunden des DataFrames
 print("Erste 5 Zeilen:")
@@ -24,21 +25,21 @@ data.drop_duplicates(inplace=True)  # Duplikate entfernen
 print("\nDeskriptive Statistiken für jede numerische Spalte:")
 print(data.describe())
 correlation = data.corr()
-print("\nKorrelation der 'quality' mit anderen chemischen Eigenschaften:")
-print(correlation['quality'].sort_values())
+print("\nKorrelation der 'Rings' mit anderen Eigenschaften:")
+print(correlation['Rings'].sort_values())
 
 # Datenvisualisierung
-# Histogramm für Alkoholgehalt
-data['alcohol'].hist()
-plt.title('Verteilung des Alkoholgehalts')
+# Histogramm für die Länge
+data['Length'].hist()
+plt.title('Verteilung der Länge')
 plt.show()
 
-# Scatter Plot für Alkoholgehalt vs. Qualität
-plt.scatter(data['alcohol'], data['quality'])
-plt.title('Alkoholgehalt vs. Qualität des Weins')
+# Scatter Plot für Länge vs. Ringe
+plt.scatter(data['Length'], data['Rings'])
+plt.title('Länge vs. Ringe')
 plt.show()
 
-# Boxplot für die Qualität basierend auf Alkoholgehalt
-data.boxplot(column='alcohol', by='quality')
-plt.title('Alkoholgehalt nach Weinqualität')
+# Boxplot für die Ringe basierend auf dem Geschlecht
+data.boxplot(column='Rings', by='Sex')
+plt.title('Ringe nach Geschlecht')
 plt.show()
