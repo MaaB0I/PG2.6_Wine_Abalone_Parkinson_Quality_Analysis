@@ -20,25 +20,36 @@ print(data.isnull().sum())
 data.dropna(inplace=True)  # Fehlende Werte entfernen
 data.drop_duplicates(inplace=True)  # Duplikate entfernen
 
+# Überprüfen und Konvertieren der Datentypen
+# Schleife über alle Spalten, um nötige Konvertierungen durchzuführen
+for column in data.columns:
+    if data[column].dtype == 'object':
+        # Versuch, die Spalte in einen numerischen Typ zu konvertieren, falls sie als 'object' gekennzeichnet ist
+        try:
+            data[column] = pd.to_numeric(data[column], errors='coerce')
+        except ValueError:
+            # Wenn die Konvertierung fehlschlägt, handle die Spalte als kategorisch
+            data[column] = pd.Categorical(data[column])
+
+print("\nDatentypen nach Überprüfung und Konversion:")
+print(data.dtypes)
+
 # Datenanalyse
 print("\nDeskriptive Statistiken für jede numerische Spalte:")
 print(data.describe())
-correlation = data.corr()
+correlation = data.corr(numeric_only=True)
 print("\nKorrelationen in den Daten:")
 print(correlation)
 
 # Datenvisualisierung
-# Histogramme für einige ausgewählte numerische Eigenschaften
 data['total_UPDRS'].hist()
 plt.title('Verteilung von total_UPDRS')
 plt.show()
 
-# Scatter Plot für eine exemplarische Beziehung
 plt.scatter(data['motor_UPDRS'], data['total_UPDRS'])
 plt.title('Motor UPDRS vs. Total UPDRS')
 plt.show()
 
-# Boxplot für Total UPDRS basierend auf einem relevanten Merkmal
 data.boxplot(column='total_UPDRS', by='age')
 plt.title('Total UPDRS nach Alter')
 plt.show()
